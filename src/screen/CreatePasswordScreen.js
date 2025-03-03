@@ -1,25 +1,21 @@
 import React, {useState} from 'react';
+import {View, StyleSheet} from 'react-native';
 import CommonText from '../components/CommonText';
 import CommonButton from '../components/CommonButton';
 import CommonTextInput from '../components/CommonTextInput';
 import CommonBackground from '../components/CommonBackground';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
 
-const LoginScreen = ({navigation}) => {
-  const [email, setEmail] = useState('');
+const CreatePasswordScreen = () => {
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <View style={styles.container}>
       <CommonBackground />
-
-      <CommonText text="Login" variant="title" style={styles.loginTitle} />
-
-      <CommonTextInput
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        icon="emailIcon"
+      <CommonText
+        text="Create New Password"
+        variant="title"
+        style={styles.createPasswordTitle}
       />
       <CommonTextInput
         label="Password"
@@ -28,14 +24,16 @@ const LoginScreen = ({navigation}) => {
         icon="lockIcon"
         secureTextEntry
       />
-      <View style={styles.forgotPasswordContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-          <CommonText text="Forgot Password?" style={styles.forgotPassword} />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.loginBtn}>
+      <CommonTextInput
+        label="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        icon="lockIcon"
+        secureTextEntry
+      />
+      <View style={styles.submitBtn}>
         <CommonButton
-          title="LOGIN"
+          title="SUBMIT"
           onPress={() => console.log('Verify Pressed')}
         />
       </View>
@@ -51,24 +49,16 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#F5F5F5',
   },
-  loginTitle: {
+  createPasswordTitle: {
     marginBottom: 30,
     textAlign: 'center',
+    fontSize: 25,
   },
-  forgotPasswordContainer: {
-    width: '90%',
-    alignSelf: 'flex-end',
-  },
-  forgotPassword: {
-    color: '#007BFF',
-    textAlign: 'right',
-  },
-
-  loginBtn: {
+  submitBtn: {
     flexDirection: 'row',
     justifyContent: 'center',
-    width: '60%',
+    width: '50%',
   },
 });
 
-export default LoginScreen;
+export default CreatePasswordScreen;
