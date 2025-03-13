@@ -5,37 +5,17 @@ import CommonButton from '../components/CommonButton';
 import CommonTextInput from '../components/CommonTextInput';
 import CommonBackground from '../components/CommonBackground';
 
-const SignupScreen = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
+const CreatePasswordScreen = () => {
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <View style={styles.container}>
       <CommonBackground />
       <CommonText
-        text="Registration"
+        text="Create New Password"
         variant="title"
-        style={styles.loginTitle}
-      />
-      <CommonTextInput
-        label="UserName"
-        value={mobile}
-        onChangeText={setMobile}
-        icon="userIcon"
-      />
-      <CommonTextInput
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        icon="emailIcon"
-      />
-      <CommonTextInput
-        label="Mobile Number"
-        value={userName}
-        onChangeText={setUserName}
-        icon="phoneIcon"
+        style={styles.createPasswordTitle}
       />
       <CommonTextInput
         label="Password"
@@ -44,9 +24,16 @@ const SignupScreen = () => {
         icon="lockIcon"
         secureTextEntry
       />
-      <View style={styles.signUpBtn}>
+      <CommonTextInput
+        label="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        icon="lockIcon"
+        secureTextEntry
+      />
+      <View style={styles.submitBtn}>
         <CommonButton
-          title="SIGN UP"
+          title="SUBMIT"
           onPress={() => console.log('Verify Pressed')}
         />
       </View>
@@ -62,15 +49,16 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#F5F5F5',
   },
-  loginTitle: {
+  createPasswordTitle: {
     marginBottom: 30,
     textAlign: 'center',
+    fontSize: 25,
   },
-  signUpBtn: {
+  submitBtn: {
     flexDirection: 'row',
     justifyContent: 'center',
     width: '50%',
   },
 });
 
-export default SignupScreen;
+export default CreatePasswordScreen;

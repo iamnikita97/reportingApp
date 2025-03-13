@@ -5,48 +5,28 @@ import CommonButton from '../components/CommonButton';
 import CommonTextInput from '../components/CommonTextInput';
 import CommonBackground from '../components/CommonBackground';
 
-const SignupScreen = () => {
-  const [userName, setUserName] = useState('');
+const InviteScreen = () => {
   const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('');
 
   return (
     <View style={styles.container}>
       <CommonBackground />
+
       <CommonText
-        text="Registration"
+        text="Invite User"
         variant="title"
-        style={styles.loginTitle}
+        style={styles.inviteTitle}
       />
-      <CommonTextInput
-        label="UserName"
-        value={mobile}
-        onChangeText={setMobile}
-        icon="userIcon"
-      />
+
       <CommonTextInput
         label="Email"
         value={email}
         onChangeText={setEmail}
         icon="emailIcon"
       />
-      <CommonTextInput
-        label="Mobile Number"
-        value={userName}
-        onChangeText={setUserName}
-        icon="phoneIcon"
-      />
-      <CommonTextInput
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        icon="lockIcon"
-        secureTextEntry
-      />
-      <View style={styles.signUpBtn}>
+      <View style={styles.submitBtn}>
         <CommonButton
-          title="SIGN UP"
+          title="SUBMIT"
           onPress={() => console.log('Verify Pressed')}
         />
       </View>
@@ -62,15 +42,15 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#F5F5F5',
   },
-  loginTitle: {
+  inviteTitle: {
     marginBottom: 30,
     textAlign: 'center',
   },
-  signUpBtn: {
+  submitBtn: {
     flexDirection: 'row',
     justifyContent: 'center',
     width: '50%',
   },
 });
 
-export default SignupScreen;
+export default InviteScreen;
