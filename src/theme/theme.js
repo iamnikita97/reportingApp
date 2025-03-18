@@ -22,11 +22,11 @@ export const CustomDarkTheme = {
   ...MD3DarkTheme,
   colors: {
     ...MD3DarkTheme.colors,
-    primary: '#FFA500',
+    primary: '#681930',
     secondary: '#600026',
     background: '#121212',
     text: '#CCC6C6',
-    button: '#FFA500',
+    button: '#681930',
     inputBackground: '#333333',
     inputBorder: '#777777',
     textColor: '#000000',

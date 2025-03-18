@@ -1,42 +1,65 @@
 import React, {useState} from 'react';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {loginUser} from '../redux/slices/authSlice';
 import CommonText from '../components/CommonText';
 import CommonButton from '../components/CommonButton';
 import CommonTextInput from '../components/CommonTextInput';
 import CommonBackground from '../components/CommonBackground';
-import {View, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 
 const LoginScreen = ({navigation}) => {
-  const [email, setEmail] = useState('test@example.com');
-  const [password, setPassword] = useState('123456');
+  const dispatch = useDispatch();
+  const {loading, error} = useSelector(state => state.auth);
+
+  // Pre-filled demo credentials
+  const [email, setEmail] = useState('demo@example.com');
+  const [password, setPassword] = useState('Demo@123');
+
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const handleLogin = () => {
-    const validEmail = 'test@example.com';
-    const validPassword = '123456';
+    let isValid = true;
 
-    if (!email.trim() || !password.trim()) {
-      Alert.alert('Error', 'Please enter email and password.');
-      return;
+    if (!email.trim()) {
+      setEmailError('Email is required.');
+      isValid = false;
+    } else {
+      setEmailError('');
     }
 
-    if (email !== validEmail || password !== validPassword) {
-      Alert.alert('Error', 'Invalid email or password.');
-      return;
+    if (!password.trim()) {
+      setPasswordError('Password is required.');
+      isValid = false;
+    } else {
+      setPasswordError('');
     }
 
-    Alert.alert('Success', 'Login Successful');
-    navigation.replace('HomeTabs');
+    if (!isValid) return;
+
+    // Static login validation
+    if (email === 'demo@example.com' && password === 'Demo@123') {
+      navigation.replace('HomeTabs');
+    } else {
+      setPasswordError('Invalid email or password.');
+    }
   };
 
   return (
     <View style={styles.container}>
       <CommonBackground />
       <CommonText text="Login" variant="title" style={styles.loginTitle} />
+
       <CommonTextInput
         label="Email"
         value={email}
         onChangeText={setEmail}
         icon="emailIcon"
       />
+      {emailError ? (
+        <CommonText text={emailError} style={styles.errorText} />
+      ) : null}
+
       <CommonTextInput
         label="Password"
         value={password}
@@ -44,14 +67,25 @@ const LoginScreen = ({navigation}) => {
         icon="lockIcon"
         secureTextEntry
       />
+      {passwordError ? (
+        <CommonText text={passwordError} style={styles.errorText} />
+      ) : null}
+
       <View style={styles.forgotPasswordContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
           <CommonText text="Forgot Password?" style={styles.forgotPassword} />
         </TouchableOpacity>
       </View>
+
       <View style={styles.loginBtn}>
-        <CommonButton title="LOGIN" onPress={handleLogin} />
+        <CommonButton
+          title={loading ? 'LOADING...' : 'LOGIN'}
+          onPress={handleLogin}
+          disabled={loading}
+        />
       </View>
+
+      {error && <CommonText text={error} style={styles.errorText} />}
     </View>
   );
 };
@@ -64,23 +98,20 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#F5F5F5',
   },
-  loginTitle: {
-    marginBottom: 30,
-    textAlign: 'center',
-  },
-  forgotPasswordContainer: {
-    width: '90%',
-    alignSelf: 'flex-end',
-  },
-  forgotPassword: {
-    color: '#007BFF',
-    textAlign: 'right',
-  },
+  loginTitle: {marginBottom: 30, textAlign: 'center'},
+  forgotPasswordContainer: {width: '90%', alignSelf: 'flex-end'},
+  forgotPassword: {color: '#007BFF', textAlign: 'right'},
   loginBtn: {
     marginTop: 15,
     flexDirection: 'row',
     justifyContent: 'center',
     width: '50%',
+  },
+  errorText: {
+    color: 'red',
+    marginTop: 5,
+    alignSelf: 'flex-start',
+    paddingLeft: 25,
   },
 });
 

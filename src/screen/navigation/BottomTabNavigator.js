@@ -5,7 +5,6 @@ import {useTheme} from 'react-native-paper';
 import SettingScreen from '../SettingScreen';
 import {View, StyleSheet} from 'react-native';
 import SecurityScreen from '../SecurityScreen';
-import AnalyticsScreen from '../AnalyticsScreen';
 import ImageComponent from '../../components/ImageComponent';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -59,7 +58,6 @@ const BottomTabNavigator = () => {
         tabBarInactiveTintColor: '#ffffff',
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Analytics" component={AnalyticsScreen} />
       <Tab.Screen name="Security" component={SecurityScreen} />
       <Tab.Screen name="Report" component={ReportScreen} />
       <Tab.Screen name="Setting" component={SettingScreen} />

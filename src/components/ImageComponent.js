@@ -31,6 +31,11 @@ const images = {
   moreIcon: require('../assets/moreIcon.png'),
   deleteIcon: require('../assets/deleteIcon.png'),
   menuIcon: require('../assets/menuIcon.png'),
+  filterIcon: require('../assets/filterIcon.png'),
+  UserDeatilsIcon: require('../assets/UserDeatilsIcon.png'),
+  chevronUpIcon: require('../assets/chevronUpIcon.png'),
+  chevronDownIcon: require('../assets/chevronDownIcon.png'),
+  customerIcon: require('../assets/customerIcon.png'),
 };
 
 const ImageComponent = ({name, style}) => {
