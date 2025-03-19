@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 import CommonCard from '../components/CommonCard';
-import {View, Text, FlatList, StyleSheet} from 'react-native';
+import {View, Text, FlatList, StyleSheet, TextInput} from 'react-native';
+import ImageComponent from '../components/ImageComponent';
+import CommonTextInput from '../components/CommonTextInput';
 import EditDetailsModal from '../components/EditDetailsModal';
 
 const UserDetailsScreen = () => {
+  const [searchText, setSearchText] = useState('');
   const [users, setUsers] = useState([
     {
       id: '1',
@@ -31,6 +34,7 @@ const UserDetailsScreen = () => {
     },
   ]);
 
+  const [filteredUsers, setFilteredUsers] = useState(users);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -40,15 +44,37 @@ const UserDetailsScreen = () => {
   };
 
   const handleSave = updatedUser => {
-    setUsers(prevUsers =>
-      prevUsers.map(user => (user.id === updatedUser.id ? updatedUser : user)),
+    const updatedUsers = users.map(user =>
+      user.id === updatedUser.id ? updatedUser : user,
     );
+    setUsers(updatedUsers);
+    setFilteredUsers(updatedUsers);
+  };
+
+  const handleSearch = text => {
+    setSearchText(text);
+    const filtered = users.filter(user =>
+      user.name.toLowerCase().includes(text.toLowerCase()),
+    );
+    setFilteredUsers(filtered);
   };
 
   return (
     <View style={styles.container}>
+      {/* Search Input */}
+      <View style={styles.searchContainer}>
+        <CommonTextInput
+          // style={styles.searchInput}
+          label="Search Users..."
+          value={searchText}
+          onChangeText={handleSearch}
+          icon="searchIcon"
+        />
+      </View>
+
+      {/* User List */}
       <FlatList
-        data={users}
+        data={filteredUsers}
         keyExtractor={item => item.id}
         renderItem={({item}) => (
           <CommonCard
@@ -70,6 +96,7 @@ const UserDetailsScreen = () => {
         )}
       />
 
+      {/* Edit Modal */}
       <EditDetailsModal
         visible={isModalVisible}
         userDetails={selectedUser}
@@ -81,7 +108,27 @@ const UserDetailsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, padding: 10},
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#fff', 
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+    fontSize: 16, // Ensures text is visible
+    color: '#000', // Text color for visibility
+  },
 });
 
 export default UserDetailsScreen;

@@ -36,6 +36,7 @@ const images = {
   chevronUpIcon: require('../assets/chevronUpIcon.png'),
   chevronDownIcon: require('../assets/chevronDownIcon.png'),
   customerIcon: require('../assets/customerIcon.png'),
+  searchIcon: require('../assets/searchIcon.png'),
 };
 
 const ImageComponent = ({name, style}) => {

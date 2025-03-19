@@ -34,10 +34,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   listContainer: {
-    paddingBottom: 20, // Adds space at the bottom
+    paddingBottom: 20, 
   },
   card: {
-    width: '100%', // All cards will have the same width
+    width: '100%', 
     marginBottom: 15,
     padding: 20,
     backgroundColor: '#fff',
