@@ -34,7 +34,7 @@ const VerificationScreen: React.FC<VerificationScreenProps> = ({
 
   return (
     <View
-      style={[styles.container, {backgroundColor: theme.colors.lightColor}]}>
+      style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
       <CommonBackground />
       <CommonText text="Verify" variant="title" style={styles.title} />
       <CommonText
@@ -60,7 +60,7 @@ const VerificationScreen: React.FC<VerificationScreenProps> = ({
       <TouchableOpacity>
         <CommonText
           text="Resend Code"
-          style={[styles.resendCode, {backgroundColor: theme.colors.subTitle}]}
+          style={[styles.resendCode, {color: theme.colors.subTitle}]}
         />
       </TouchableOpacity>
       <View style={styles.verifyBtn}>

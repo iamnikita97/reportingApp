@@ -1,8 +1,8 @@
-import React, {useState, FC, memo} from 'react';
+import React, {useState, FC} from 'react';
 import {View, StyleSheet} from 'react-native';
+import {TextInput, useTheme} from 'react-native-paper';
 import ImageComponent from './ImageComponent';
 import {CustomThemeType} from '../theme/theme';
-import {TextInput, useTheme} from 'react-native-paper';
 
 interface CommonTextInputProps {
   label: string;
@@ -32,12 +32,23 @@ const CommonTextInput: FC<CommonTextInputProps> = ({
         onChangeText={onChangeText}
         mode="outlined"
         secureTextEntry={isPasswordVisible}
-        left={icon ? <LeftIcon icon={icon} /> : null}
+        left={
+          icon ? (
+            <TextInput.Icon
+              icon={() => <ImageComponent name={icon} style={styles.icon} />}
+            />
+          ) : null
+        }
         right={
           secureTextEntry ? (
-            <RightIcon
-              isVisible={isPasswordVisible}
-              onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
+            <TextInput.Icon
+              icon={() => (
+                <ImageComponent
+                  name={isPasswordVisible ? 'visbleOnIcon' : 'visbleOffIcon'}
+                  style={styles.icon}
+                />
+              )}
+              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
             />
           ) : null
         }
@@ -63,23 +74,6 @@ const CommonTextInput: FC<CommonTextInputProps> = ({
   );
 };
 
-const LeftIcon: FC<{icon: string}> = memo(({icon}) => {
-  const renderIcon = () => <ImageComponent name={icon} style={styles.icon} />;
-  return <TextInput.Icon icon={renderIcon} />;
-});
-
-const RightIcon: FC<{isVisible: boolean; onToggle: () => void}> = memo(
-  ({isVisible, onToggle}) => {
-    const renderIcon = () => (
-      <ImageComponent
-        name={isVisible ? 'visbleOnIcon' : 'visbleOffIcon'}
-        style={styles.icon}
-      />
-    );
-    return <TextInput.Icon icon={renderIcon} onPress={onToggle} />;
-  },
-);
-
 const styles = StyleSheet.create({
   inputContainer: {
     width: '90%',
@@ -91,8 +85,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   icon: {
-    width: 29,
-    height: 29,
+    width: 24,
+    height: 24,
     resizeMode: 'contain',
   },
 });

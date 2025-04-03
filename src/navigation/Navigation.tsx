@@ -1,8 +1,8 @@
 // AppNavigator.tsx
 import React from 'react';
 import MenuPage from '../Pages/MenuPage';
-import Header from '../components/Header';
 import HomeScreen from '../screens/HomeScreen';
+import UsersScreen from '../screens/UsersScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import SettingScreen from '../screens/SettingScreen';
@@ -10,7 +10,6 @@ import CustomerScreen from '../screens/CustomerScreen';
 import HelpSupportScreen from '../screens/HelpSupportScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import EditProfileScreen from '../screens/EditProfileScreen';
-import UserDetailsScreen from '../screens/UserDetailsScreen';
 import VerificationScreen from '../screens/VerificationScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
@@ -72,9 +71,7 @@ const AppNavigator = () => (
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={({navigation}) => ({
-          header: () => <Header title="Home" />,
-        })}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Notifications"
@@ -83,17 +80,13 @@ const AppNavigator = () => (
       />
       <Stack.Screen
         name="UserProfile"
-        component={UserDetailsScreen}
-        options={({navigation}) => ({
-          header: () => <Header title="UserDetails" />,
-        })}
+        component={UsersScreen}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Customers"
         component={CustomerScreen}
-        options={({navigation}) => ({
-          header: () => <Header title="Customers" />,
-        })}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="ChangePassword"

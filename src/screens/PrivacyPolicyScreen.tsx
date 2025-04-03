@@ -24,7 +24,7 @@ const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({
   const theme = useTheme() as CustomThemeType;
   return (
     <SafeAreaView
-      style={[styles.safeArea, {backgroundColor: theme.colors.lightColor}]}>
+      style={[styles.safeArea, {backgroundColor: theme.colors.whiteSmoke}]}>
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>

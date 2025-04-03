@@ -8,13 +8,18 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import {useTheme} from 'react-native-paper';
+import {CustomThemeType} from '../theme/theme';
 import {useNavigation} from '@react-navigation/native';
 import ImageComponent from '../components/ImageComponent';
+import {RootStackParamList} from '../navigation/Navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const MenuPage: React.FC = () => {
-  const navigation = useNavigation();
+  const theme = useTheme() as CustomThemeType;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const translateX = useRef(new Animated.Value(-width * 0.7)).current;
   const [isClosing, setIsClosing] = useState(false);
   const [selected, setSelected] = useState('Dashboard');
@@ -25,7 +30,7 @@ const MenuPage: React.FC = () => {
       duration: 300,
       useNativeDriver: true,
     }).start();
-  }, []);
+  }, [translateX]);
 
   const closeMenu = () => {
     if (isClosing) return;
@@ -47,7 +52,7 @@ const MenuPage: React.FC = () => {
     {id: '1', label: 'Home', icon: 'homeIcon', screen: 'Home'},
     {
       id: '2',
-      label: 'User Details',
+      label: 'Users',
       icon: 'userProfileIcon',
       screen: 'UserProfile',
     },
@@ -62,7 +67,8 @@ const MenuPage: React.FC = () => {
   ];
 
   return (
-    <View style={styles.overlay}>
+    <View
+      style={[styles.overlay, {backgroundColor: theme.colors.overlayColor}]}>
       {!isClosing && (
         <TouchableOpacity
           style={styles.backdrop}
@@ -71,25 +77,46 @@ const MenuPage: React.FC = () => {
         />
       )}
       {!isClosing && (
-        <Animated.View style={[styles.container, {transform: [{translateX}]}]}>
-          <TouchableOpacity style={styles.profileSection}>
+        <Animated.View
+          style={[
+            styles.container,
+            {transform: [{translateX}]},
+            {backgroundColor: theme.colors.inputText},
+          ]}>
+          <TouchableOpacity
+            style={[
+              styles.profileSection,
+              {backgroundColor: theme.colors.whiteSmoke},
+            ]}>
             <ImageComponent
               name="userProfileIcon"
-              style={styles.profileImage}
+              style={[
+                styles.profileImage,
+                {borderColor: theme.colors.inputText},
+              ]}
             />
             <View style={styles.userInfo}>
-              <Text style={styles.profileName}>Nikita Mahajan</Text>
-              <Text style={styles.profileEmail}>Developer</Text>
+              <Text
+                style={[styles.profileName, {color: theme.colors.textColor}]}>
+                Nikita Mahajan
+              </Text>
+              <Text
+                style={[styles.profileEmail, {color: theme.colors.lightColor}]}>
+                Developer
+              </Text>
             </View>
           </TouchableOpacity>
           <FlatList
             data={menuOptions}
             keyExtractor={item => item.id}
+            extraData={selected}
             renderItem={({item}) => (
               <TouchableOpacity
                 style={[
                   styles.menuItem,
-                  selected === item.label && styles.menuItemSelected,
+                  selected === item.label && {
+                    backgroundColor: theme.colors.lightColor,
+                  },
                 ]}
                 onPress={() => {
                   setSelected(item.label);
@@ -105,12 +132,19 @@ const MenuPage: React.FC = () => {
                   name={item.icon}
                   style={[
                     styles.menuIcon,
-                    selected === item.label && styles.menuIconSelected,
+                    {tintColor: theme.colors.lightColor},
+                    selected === item.label && {
+                      tintColor: theme.colors.lightBlue,
+                    },
                   ]}
                 />
+
                 <Text
                   style={[
                     styles.menuText,
+                    selected === item.label && {
+                      color: theme.colors.lightBlue,
+                    },
                     selected === item.label && styles.menuTextSelected,
                   ]}>
                   {item.label}
@@ -119,19 +153,27 @@ const MenuPage: React.FC = () => {
             )}
           />
           <TouchableOpacity
-            style={styles.logoutButton}
+            style={[
+              styles.logoutButton,
+              {borderTopColor: theme.colors.disabledColor},
+            ]}
             onPress={() => {
               closeMenu();
 
               setTimeout(() => {
                 navigation.reset({
                   index: 0,
-                  routes: [{name: 'Login'}],
+                  routes: [{name: 'Login' as keyof RootStackParamList}],
                 });
               }, 300);
             }}>
-            <ImageComponent name="logoutIcon" style={styles.menuIcon} />
-            <Text style={styles.menuText}>Logout</Text>
+            <ImageComponent
+              name="logoutIcon"
+              style={[styles.menuIcon, {tintColor: theme.colors.subTitle}]}
+            />
+            <Text style={[styles.menuText, {color: theme.colors.subTitle}]}>
+              Logout
+            </Text>
           </TouchableOpacity>
         </Animated.View>
       )}
@@ -145,7 +187,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-start',
   },
   backdrop: {
@@ -156,7 +197,6 @@ const styles = StyleSheet.create({
   container: {
     width: '75%',
     height: '100%',
-    backgroundColor: '#FFFFFF',
     paddingTop: 30,
     paddingHorizontal: 15,
     elevation: 5,
@@ -168,7 +208,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     paddingHorizontal: 10,
-    backgroundColor: '#F4F7FC',
     borderRadius: 10,
     marginBottom: 20,
   },
@@ -177,7 +216,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: '#fff',
   },
   userInfo: {
     marginLeft: 15,
@@ -185,11 +223,9 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
   },
   profileEmail: {
     fontSize: 14,
-    color: '#666',
   },
   menuItem: {
     flexDirection: 'row',
@@ -199,38 +235,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 5,
   },
-  menuItemSelected: {
-    backgroundColor: '#EAF1FF',
-  },
   menuText: {
     fontSize: 16,
-    color: '#333',
     marginLeft: 15,
   },
   menuTextSelected: {
-    color: '#007BFF',
     fontWeight: 'bold',
   },
   menuIcon: {
     width: 24,
     height: 24,
-    tintColor: '#333',
-  },
-  menuIconSelected: {
-    tintColor: '#007BFF',
-  },
-  badge: {
-    backgroundColor: 'red',
-    borderRadius: 10,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    position: 'absolute',
-    right: 15,
-  },
-  badgeText: {
-    fontSize: 12,
-    color: '#fff',
-    fontWeight: 'bold',
   },
   logoutButton: {
     flexDirection: 'row',
@@ -238,7 +252,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginTop: 'auto',
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
   },
 });
 

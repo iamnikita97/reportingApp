@@ -1,6 +1,8 @@
 import React from 'react';
+import Header from '../components/Header';
 import {useTheme} from 'react-native-paper';
 import {CustomThemeType} from '../theme/theme';
+import {useNavigation} from '@react-navigation/native';
 import {View, Text, StyleSheet, FlatList, ListRenderItem} from 'react-native';
 
 interface CountItem {
@@ -9,6 +11,7 @@ interface CountItem {
 }
 
 const HomeScreen: React.FC = () => {
+  const navigation = useNavigation();
   const theme = useTheme() as CustomThemeType;
   const counts: CountItem[] = [
     {title: 'Users', count: 120},
@@ -37,12 +40,15 @@ const HomeScreen: React.FC = () => {
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
-      <FlatList
-        data={counts}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => `${item.title}-${index}`}
-        contentContainerStyle={styles.listContainer}
-      />
+      <Header title="Home" onBackPress={() => navigation.goBack()} />
+      <View style={styles.mainContainer}>
+        <FlatList
+          data={counts}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `${item.title}-${index}`}
+          contentContainerStyle={styles.listContainer}
+        />
+      </View>
     </View>
   );
 };
@@ -50,10 +56,12 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
   },
   listContainer: {
     paddingBottom: 20,
+  },
+  mainContainer: {
+    padding: 20,
   },
   card: {
     width: '100%',

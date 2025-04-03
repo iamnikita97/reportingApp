@@ -62,7 +62,7 @@ const CommonFilterModal: React.FC<CommonFilterModalProps> = ({
                         backgroundColor: theme.colors.primary,
                       },
                     ]}>
-                    <Text style={{color: theme.colors.textColor}}>
+                    <Text style={{color: theme.colors.inputText}}>
                       {val.label}
                     </Text>
                   </TouchableOpacity>
@@ -77,7 +77,7 @@ const CommonFilterModal: React.FC<CommonFilterModalProps> = ({
             ]}
             onPress={onClose}>
             <Text
-              style={[styles.closeButtonText, {color: theme.colors.textColor}]}>
+              style={[styles.closeButtonText, {color: theme.colors.inputText}]}>
               Close
             </Text>
           </TouchableOpacity>
@@ -109,11 +109,17 @@ const styles = StyleSheet.create({
   filterButtons: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    gap: 8,
+    justifyContent: 'space-between',
   },
   filterButton: {
-    padding: 5,
-    margin: 2,
+    flex: 1,
+    minWidth: '30%',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    margin: 5,
     borderRadius: 5,
+    alignItems: 'center',
   },
   closeButton: {
     marginTop: 10,

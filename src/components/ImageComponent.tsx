@@ -1,6 +1,7 @@
 import React from 'react';
 import {Image, ImageStyle, StyleProp} from 'react-native';
 
+// ✅ Define all images in a dictionary
 const images: Record<string, any> = {
   emailIcon: require('../assets/emailIcon.png'),
   lockIcon: require('../assets/lockIcon.png'),
@@ -37,6 +38,11 @@ const images: Record<string, any> = {
   chevronDownIcon: require('../assets/chevronDownIcon.png'),
   customerIcon: require('../assets/customerIcon.png'),
   searchIcon: require('../assets/searchIcon.png'),
+  profileIcon: require('../assets/profileIcon.png'),
+  createIcon: require('../assets/createIcon.png'),
+  CloseIcon: require('../assets/CloseIcon.png'),
+  EditIcon: require('../assets/EditIcon.png'),
+  ViewIcon: require('../assets/ViewIcon.png'),
 };
 
 interface ImageComponentProps {
@@ -46,6 +52,14 @@ interface ImageComponentProps {
 
 const ImageComponent: React.FC<ImageComponentProps> = ({name, style}) => {
   const source = images[name];
+
+  if (!source) {
+    console.warn(`⚠️ ImageComponent: Image "${name}" not found.`);
+    return null;
+  }
+
+  console.log(`✅ Rendering ImageComponent with: ${name}`);
+
   return <Image source={source} style={style} />;
 };
 

@@ -16,7 +16,7 @@ const SignupScreen: React.FC = () => {
 
   return (
     <View
-      style={[styles.container, {backgroundColor: theme.colors.lightColor}]}>
+      style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
       <CommonBackground />
       <CommonText
         text="Registration"

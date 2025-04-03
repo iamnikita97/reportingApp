@@ -7,7 +7,7 @@ const ReportScreen: React.FC = () => {
   const theme = useTheme() as CustomThemeType;
   return (
     <View
-      style={[styles.container, {backgroundColor: theme.colors.lightColor}]}>
+      style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
       <Text style={styles.text}>Report Screen</Text>
     </View>
   );

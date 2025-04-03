@@ -53,7 +53,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
 
   return (
     <View
-      style={[styles.container, {backgroundColor: theme.colors.lightColor}]}>
+      style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
       <CommonBackground />
       <CommonText text="Login" variant="title" style={styles.loginTitle} />
 
@@ -61,12 +61,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
         label="Email"
         value={email}
         onChangeText={setEmail}
-        icon="emailIcon"
+        icon="emailIcon" // Ensure this matches the key in ImageComponent
       />
+
       {emailError ? (
         <CommonText
           text={emailError}
-          style={[styles.errorText, {backgroundColor: theme.colors.redColor}]}
+          style={[styles.errorText, {color: theme.colors.redColor}]}
         />
       ) : null}
 
@@ -85,10 +86,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
         <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
           <CommonText
             text="Forgot Password?"
-            style={[
-              styles.forgotPassword,
-              {backgroundColor: theme.colors.lightBlue},
-            ]}
+            style={[styles.forgotPassword, {color: theme.colors.lightBlue}]}
           />
         </TouchableOpacity>
       </View>

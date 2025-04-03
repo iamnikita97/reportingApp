@@ -15,6 +15,7 @@ declare global {
       lightPink: string;
       roseColor: string;
       whiteSmoke: string;
+      overlayColor: string;
     }
     interface Theme {
       colors: ThemeColors;
@@ -36,6 +37,7 @@ export type CustomThemeType = MD3Theme & {
     lightPink: string;
     roseColor: string;
     whiteSmoke: string;
+    overlayColor: string;
   };
 };
 
@@ -58,6 +60,7 @@ export const LightTheme: CustomThemeType = {
     lightPink: '#FAD2E1',
     roseColor: '#D88ABF',
     whiteSmoke: '#f5f5f5',
+    overlayColor: '#00000080',
   },
 };
 
@@ -80,5 +83,6 @@ export const DarkTheme: CustomThemeType = {
     lightPink: '#FAD2E1',
     roseColor: '#D88ABF',
     whiteSmoke: '#f5f5f5',
+    overlayColor: '#00000080',
   },
 };

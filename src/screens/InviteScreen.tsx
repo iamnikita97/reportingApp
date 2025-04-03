@@ -13,7 +13,7 @@ const InviteScreen: React.FC = () => {
 
   return (
     <View
-      style={[styles.container, {backgroundColor: theme.colors.lightColor}]}>
+      style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
       <CommonBackground />
 
       <CommonText
