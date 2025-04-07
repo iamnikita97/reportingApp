@@ -3,18 +3,22 @@ import ImageComponent from './ImageComponent';
 import {useNavigation, NavigationProp} from '@react-navigation/native';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import {RootStackParamList} from '../navigation/Navigation'; // Adjust the path based on your project structure
+import {RootStackParamList} from '../navigation/Navigation';
 
 interface HeaderProps {
   title: string;
   onBackPress?: () => void;
   showBackButton?: boolean;
+  onRightIconPress?: () => void;
+  showRightIcon?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
   title,
   onBackPress,
   showBackButton = true,
+  onRightIconPress,
+  showRightIcon = false,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const theme = useTheme();
@@ -42,6 +46,15 @@ const Header: React.FC<HeaderProps> = ({
           />
         </TouchableOpacity>
       )}
+
+      {showRightIcon && onRightIconPress && (
+        <TouchableOpacity onPress={onRightIconPress} style={styles.rightIcon}>
+          <ImageComponent
+            name="moreIcon"
+            style={[styles.icon, {tintColor: theme.colors.onPrimary}]}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -61,6 +74,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   backButton: {
+    padding: 10,
+  },
+  rightIcon: {
     padding: 10,
   },
   icon: {

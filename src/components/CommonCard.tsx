@@ -56,8 +56,6 @@ const CommonCard: React.FC<CommonCardProps> = ({
       </View>
 
       {expanded && <View style={styles.details}>{extraContent}</View>}
-
-      {/* Bottom right icons */}
       <View style={styles.bottomIcons}>
         {onView && (
           <TouchableOpacity onPress={onView} style={styles.iconButton}>

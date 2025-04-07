@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -20,25 +20,39 @@ interface CommonFormProps {
   fields: FormField[];
   onSubmit: (data: Record<string, string>) => void;
   onCancel: () => void;
+  initialValues?: Record<string, string>;
+  readOnly?: boolean;
 }
 
 const CommonForm: React.FC<CommonFormProps> = ({
   fields,
   onSubmit,
   onCancel,
+  initialValues = {},
+  readOnly = false,
 }) => {
   const theme = useTheme() as CustomThemeType;
 
-  // Initialize form state dynamically based on provided fields
   const initialFormState = fields.reduce(
     (acc, field) => {
-      acc[field.name] = '';
+      acc[field.name] = initialValues[field.name] || '';
       return acc;
     },
     {} as Record<string, string>,
   );
 
   const [formData, setFormData] = useState(initialFormState);
+
+  useEffect(() => {
+    const newInitialFormState = fields.reduce(
+      (acc, field) => {
+        acc[field.name] = initialValues[field.name] || '';
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+    setFormData(newInitialFormState);
+  }, [initialValues, fields]);
 
   const handleChange = (fieldName: string, value: string) => {
     setFormData({...formData, [fieldName]: value});
@@ -50,34 +64,48 @@ const CommonForm: React.FC<CommonFormProps> = ({
         <View key={field.name}>
           <Text style={styles.label}>{field.label}</Text>
           <TextInput
-            style={[styles.input, {borderColor: theme.colors.inputBorder}]}
+            style={[
+              styles.input,
+              {
+                borderColor: theme.colors.inputBorder,
+                backgroundColor: readOnly
+                  ? theme.colors.iconColor
+                  : theme.colors.inputText,
+              },
+            ]}
             value={formData[field.name]}
             onChangeText={text => handleChange(field.name, text)}
             placeholder={field.placeholder}
             keyboardType={field.keyboardType || 'default'}
+            editable={!readOnly}
           />
         </View>
       ))}
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.cancelButton,
-            {backgroundColor: theme.colors.lightColor},
-          ]}
-          onPress={onCancel}>
-          <Text style={[styles.buttonText, {color: theme.colors.inputText}]}>
-            Cancel
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.submitButton, {backgroundColor: theme.colors.primary}]}
-          onPress={() => onSubmit(formData)}>
-          <Text style={[styles.buttonText, {color: theme.colors.inputText}]}>
-            Submit
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {!readOnly && (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.cancelButton,
+              {backgroundColor: theme.colors.lightColor},
+            ]}
+            onPress={onCancel}>
+            <Text style={[styles.buttonText, {color: theme.colors.inputText}]}>
+              Cancel
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.submitButton,
+              {backgroundColor: theme.colors.primary},
+            ]}
+            onPress={() => onSubmit(formData)}>
+            <Text style={[styles.buttonText, {color: theme.colors.inputText}]}>
+              Submit
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };

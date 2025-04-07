@@ -11,6 +11,7 @@ import Header from '../components/Header';
 import {useTheme} from 'react-native-paper';
 import {CustomThemeType} from '../theme/theme';
 import ImageComponent from '../components/ImageComponent';
+import NotificationMenu from '../components/NotificationMenu';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
 
 type Notification = {
@@ -43,10 +44,21 @@ const initialNotifications: Notification[] = [
 
 const NotificationScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const theme = useTheme() as CustomThemeType;
+  const [menuVisible, setMenuVisible] = useState(false);
   const [notifications, setNotifications] = useState(initialNotifications);
 
   const deleteNotification = (id: string) => {
     setNotifications(notifications.filter(item => item.id !== id));
+  };
+
+  const handleMarkAllRead = () => {
+    // logic to mark all as read
+    setMenuVisible(false);
+  };
+
+  const handleDeleteAll = () => {
+    setNotifications([]);
+    setMenuVisible(false);
   };
 
   const renderRightActions = (id: string) => (
@@ -64,7 +76,12 @@ const NotificationScreen: React.FC<{navigation: any}> = ({navigation}) => {
     <GestureHandlerRootView style={styles.container}>
       <View
         style={[styles.container, {backgroundColor: theme.colors.background}]}>
-        <Header title="Notifications" onBackPress={() => navigation.goBack()} />
+        <Header
+          title="Notifications"
+          onBackPress={() => navigation.goBack()}
+          showRightIcon={true}
+          onRightIconPress={() => setMenuVisible(true)}
+        />
         <FlatList
           data={notifications}
           keyExtractor={item => item.id}
@@ -102,6 +119,12 @@ const NotificationScreen: React.FC<{navigation: any}> = ({navigation}) => {
               </View>
             </Swipeable>
           )}
+        />
+        <NotificationMenu
+          visible={menuVisible}
+          onClose={() => setMenuVisible(false)}
+          onMarkAllRead={handleMarkAllRead}
+          onDeleteAll={handleDeleteAll}
         />
       </View>
     </GestureHandlerRootView>

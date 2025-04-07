@@ -3,7 +3,14 @@ import Header from '../components/Header';
 import {useTheme} from 'react-native-paper';
 import {CustomThemeType} from '../theme/theme';
 import {useNavigation} from '@react-navigation/native';
-import {View, Text, StyleSheet, FlatList, ListRenderItem} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ListRenderItem,
+  TouchableOpacity,
+} from 'react-native';
 
 interface CountItem {
   title: string;
@@ -13,6 +20,7 @@ interface CountItem {
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation();
   const theme = useTheme() as CustomThemeType;
+
   const counts: CountItem[] = [
     {title: 'Users', count: 120},
     {title: 'Reports', count: 45},
@@ -20,21 +28,31 @@ const HomeScreen: React.FC = () => {
   ];
 
   const renderItem: ListRenderItem<CountItem> = ({item}) => (
-    <View
-      style={[
-        styles.card,
-        {
-          backgroundColor: theme.colors.inputText,
-          shadowColor: theme.colors.textColor,
-        },
-      ]}>
-      <Text style={[styles.cardTitle, {color: theme.colors.subTitle}]}>
-        {item.title}
-      </Text>
-      <Text style={[styles.cardCount, {color: theme.colors.primary}]}>
-        {item.count}
-      </Text>
-    </View>
+    <TouchableOpacity
+      activeOpacity={1}
+      onPress={() => {
+        if (item.title === 'Users') {
+          navigation.navigate('UserProfile' as never);
+        } else if (item.title === 'Customers') {
+          navigation.navigate('Customers' as never);
+        }
+      }}>
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: theme.colors.inputText,
+            shadowColor: theme.colors.textColor,
+          },
+        ]}>
+        <Text style={[styles.cardTitle, {color: theme.colors.subTitle}]}>
+          {item.title}
+        </Text>
+        <Text style={[styles.cardCount, {color: theme.colors.primary}]}>
+          {item.count}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (

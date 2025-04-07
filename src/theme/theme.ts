@@ -16,6 +16,8 @@ declare global {
       roseColor: string;
       whiteSmoke: string;
       overlayColor: string;
+      dangerColor: string;
+      orangeColor: string;
     }
     interface Theme {
       colors: ThemeColors;
@@ -38,6 +40,8 @@ export type CustomThemeType = MD3Theme & {
     roseColor: string;
     whiteSmoke: string;
     overlayColor: string;
+    dangerColor: string;
+    orangeColor: string;
   };
 };
 
@@ -61,6 +65,8 @@ export const LightTheme: CustomThemeType = {
     roseColor: '#D88ABF',
     whiteSmoke: '#f5f5f5',
     overlayColor: '#00000080',
+    dangerColor: '#FF0000',
+    orangeColor: '#FFA500',
   },
 };
 
@@ -84,5 +90,7 @@ export const DarkTheme: CustomThemeType = {
     roseColor: '#D88ABF',
     whiteSmoke: '#f5f5f5',
     overlayColor: '#00000080',
+    dangerColor: '#FF0000',
+    orangeColor: '#FFA500',
   },
 };

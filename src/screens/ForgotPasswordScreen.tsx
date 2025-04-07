@@ -1,21 +1,18 @@
+// ForgotPasswordScreen.tsx
 import React from 'react';
 import {useTheme} from 'react-native-paper';
 import {CustomThemeType} from '../theme/theme';
 import CommonText from '../components/CommonText';
 import CommonButton from '../components/CommonButton';
 import ImageComponent from '../components/ImageComponent';
+import {RootStackParamList} from '../navigation/Navigation';
 import CommonBackground from '../components/CommonBackground';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-type RootStackParamList = {
-  ForgotPasswordScreen: undefined;
-  VerificationScreen: undefined;
-};
-
 type ForgotPasswordScreenProps = NativeStackScreenProps<
   RootStackParamList,
-  'ForgotPasswordScreen'
+  'ForgotPassword'
 >;
 
 const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({

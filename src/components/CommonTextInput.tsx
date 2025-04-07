@@ -1,4 +1,4 @@
-import React, {useState, FC} from 'react';
+import React, {useState, FC, useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {TextInput, useTheme} from 'react-native-paper';
 import ImageComponent from './ImageComponent';
@@ -24,6 +24,22 @@ const CommonTextInput: FC<CommonTextInputProps> = ({
   const [isPasswordVisible, setIsPasswordVisible] = useState(secureTextEntry);
   const theme = useTheme() as CustomThemeType;
 
+  const renderLeftIcon = useCallback(
+    () => (icon ? <ImageComponent name={icon} style={styles.icon} /> : null),
+    [icon],
+  );
+
+  const renderRightIcon = useCallback(
+    () =>
+      secureTextEntry ? (
+        <ImageComponent
+          name={isPasswordVisible ? 'visbleOnIcon' : 'visbleOffIcon'}
+          style={styles.icon}
+        />
+      ) : null,
+    [isPasswordVisible, secureTextEntry],
+  );
+
   return (
     <View style={[styles.inputContainer, style]}>
       <TextInput
@@ -32,25 +48,14 @@ const CommonTextInput: FC<CommonTextInputProps> = ({
         onChangeText={onChangeText}
         mode="outlined"
         secureTextEntry={isPasswordVisible}
-        left={
-          icon ? (
-            <TextInput.Icon
-              icon={() => <ImageComponent name={icon} style={styles.icon} />}
-            />
-          ) : null
-        }
+        left={icon ? <TextInput.Icon icon={renderLeftIcon} /> : undefined}
         right={
           secureTextEntry ? (
             <TextInput.Icon
-              icon={() => (
-                <ImageComponent
-                  name={isPasswordVisible ? 'visbleOnIcon' : 'visbleOffIcon'}
-                  style={styles.icon}
-                />
-              )}
-              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+              icon={renderRightIcon}
+              onPress={() => setIsPasswordVisible(prev => !prev)}
             />
-          ) : null
+          ) : undefined
         }
         style={[
           styles.input,

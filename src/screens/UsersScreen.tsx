@@ -1,14 +1,14 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import Header from '../components/Header';
-import CommonDialog from '../components/CommonDialog';
 import {useTheme} from 'react-native-paper';
 import {CustomThemeType} from '../theme/theme';
 import CommonCard from '../components/CommonCard';
+import CommonForm from '../components/CommonForm';
+import CommonDialog from '../components/CommonDialog';
 import {useNavigation} from '@react-navigation/native';
 import CommonSearchBar from '../components/CommonSearchBar';
-import CommonFilterModal from '../components/CommonFilterModal';
-import CommonForm from '../components/CommonForm';
 import {View, FlatList, StyleSheet, Text} from 'react-native';
+import CommonFilterModal from '../components/CommonFilterModal';
 
 const USERS = [
   {
@@ -37,6 +37,15 @@ const USERS = [
   },
 ];
 
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  gender: string;
+};
+
 const UsersScreen: React.FC = () => {
   const navigation = useNavigation();
   const theme = useTheme() as CustomThemeType;
@@ -45,25 +54,16 @@ const UsersScreen: React.FC = () => {
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
-
-  type User = {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    role: string;
-    gender: string;
-  };
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isReadOnly, setIsReadOnly] = useState(false);
 
   const filterUsers = useCallback(() => {
     let filtered = USERS.filter(user =>
       user.name.toLowerCase().includes(searchText.toLowerCase()),
     );
-
     if (selectedRole !== 'All') {
       filtered = filtered.filter(user => user.role === selectedRole);
     }
-
     setFilteredUsers(filtered);
   }, [searchText, selectedRole]);
 
@@ -71,18 +71,48 @@ const UsersScreen: React.FC = () => {
     filterUsers();
   }, [filterUsers]);
 
+  const fields = [
+    {name: 'name', label: 'Name', placeholder: 'Enter name'},
+    {
+      name: 'email',
+      label: 'Email',
+      placeholder: 'Enter email',
+      keyboardType: 'email-address' as const,
+    },
+    {
+      name: 'phone',
+      label: 'Phone',
+      placeholder: 'Enter phone',
+      keyboardType: 'phone-pad' as const,
+    },
+    {name: 'role', label: 'Role', placeholder: 'Enter role'},
+    {name: 'gender', label: 'Gender', placeholder: 'Enter gender'},
+  ];
+
+  const handleSubmit = (data: Record<string, string>) => {
+    console.log(isReadOnly ? 'Viewing user:' : 'Updating user:', data);
+    setDialogVisible(false);
+    setSelectedUser(null);
+  };
+
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
       <Header title="Users" onBackPress={() => navigation.goBack()} />
       <View style={styles.mainContainer}>
         <CommonSearchBar
+          title="Add User"
           value={searchText}
           onChangeText={setSearchText}
-          onFilterPress={() => console.log('Filter pressed')}
-          onCreatePress={() => setDialogVisible(true)}
+          onFilterPress={() => setFilterVisible(true)}
+          onCreatePress={() => {
+            setSelectedUser(null);
+            setIsReadOnly(false);
+            setDialogVisible(true);
+          }}
         />
       </View>
+
       <FlatList
         data={filteredUsers}
         keyExtractor={item => item.id.toString()}
@@ -97,8 +127,16 @@ const UsersScreen: React.FC = () => {
                 <Text>{`Gender: ${item.gender}`}</Text>
               </View>
             }
-            onView={() => console.log(`View ${item.name}`)}
-            onEdit={() => console.log(`Edit ${item.name}`)}
+            onView={() => {
+              setSelectedUser(item);
+              setIsReadOnly(true);
+              setDialogVisible(true);
+            }}
+            onEdit={() => {
+              setSelectedUser(item);
+              setIsReadOnly(false);
+              setDialogVisible(true);
+            }}
           />
         )}
       />
@@ -124,31 +162,22 @@ const UsersScreen: React.FC = () => {
 
       <CommonDialog
         visible={dialogVisible}
-        title="Add New User"
+        title={
+          isReadOnly ? 'View User' : selectedUser ? 'Edit User' : 'Add New User'
+        }
         content={
           <CommonForm
-            fields={[
-              {name: 'name', label: 'Name', placeholder: 'Enter name'},
-              {
-                name: 'email',
-                label: 'Email',
-                placeholder: 'Enter email',
-                keyboardType: 'email-address',
-              },
-              {
-                name: 'phone',
-                label: 'Phone',
-                placeholder: 'Enter phone',
-                keyboardType: 'phone-pad',
-              },
-              {name: 'role', label: 'Role', placeholder: 'Enter role'},
-              {name: 'gender', label: 'Gender', placeholder: 'Enter gender'},
-            ]}
-            onSubmit={data => console.log('Form Submitted:', data)}
+            fields={fields}
+            initialValues={selectedUser || {}}
+            readOnly={isReadOnly}
+            onSubmit={handleSubmit}
             onCancel={() => setDialogVisible(false)}
           />
         }
-        onDismiss={() => setDialogVisible(false)}
+        onDismiss={() => {
+          setDialogVisible(false);
+          setSelectedUser(null);
+        }}
         onSubmit={() => console.log('Submit button clicked')}
       />
     </View>

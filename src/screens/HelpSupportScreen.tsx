@@ -10,7 +10,6 @@ import {
 import Header from '../components/Header';
 import {useTheme} from 'react-native-paper';
 import {CustomThemeType} from '../theme/theme';
-
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 type HelpSupportScreenProps = {

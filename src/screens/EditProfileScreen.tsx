@@ -6,13 +6,14 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Header from '../components/Header';
 import {useTheme} from 'react-native-paper';
 import {CustomThemeType} from '../theme/theme';
-import {DatePickerModal} from 'react-native-paper-dates';
 import ImageComponent from '../components/ImageComponent';
 import {StackNavigationProp} from '@react-navigation/stack';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 type Props = {
   navigation: StackNavigationProp<any>;
@@ -20,13 +21,13 @@ type Props = {
 
 const EditProfileScreen: React.FC<Props> = ({navigation}) => {
   const theme = useTheme() as CustomThemeType;
-  const [date, setDate] = useState<Date>(new Date(1997, 3, 25));
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [showPicker, setShowPicker] = useState<boolean>(false);
 
-  const onConfirm = (params: {date?: Date}) => {
+  const handleDateChange = (event: any, selectedDate?: Date) => {
     setShowPicker(false);
-    if (params.date) {
-      setDate(params.date);
+    if (selectedDate) {
+      setDate(selectedDate);
     }
   };
 
@@ -34,6 +35,7 @@ const EditProfileScreen: React.FC<Props> = ({navigation}) => {
     <View
       style={[styles.container, {backgroundColor: theme.colors.background}]}>
       <Header title="Edit Profile" onBackPress={() => navigation.goBack()} />
+
       <View style={styles.imageContainer}>
         <Image
           source={{uri: 'https://randomuser.me/api/portraits/women/65.jpg'}}
@@ -47,7 +49,9 @@ const EditProfileScreen: React.FC<Props> = ({navigation}) => {
           />
         </TouchableOpacity>
       </View>
+
       <View style={styles.form}>
+        {/* Name */}
         <Text style={[styles.label, {color: theme.colors.textColor}]}>
           Name
         </Text>
@@ -63,6 +67,7 @@ const EditProfileScreen: React.FC<Props> = ({navigation}) => {
           editable={false}
         />
 
+        {/* Email */}
         <Text style={[styles.label, {color: theme.colors.textColor}]}>
           Email
         </Text>
@@ -79,6 +84,7 @@ const EditProfileScreen: React.FC<Props> = ({navigation}) => {
           editable={false}
         />
 
+        {/* Password */}
         <Text style={[styles.label, {color: theme.colors.textColor}]}>
           Password
         </Text>
@@ -95,6 +101,7 @@ const EditProfileScreen: React.FC<Props> = ({navigation}) => {
           editable={false}
         />
 
+        {/* Date of Birth Picker */}
         <Text style={[styles.label, {color: theme.colors.textColor}]}>
           Date of Birth
         </Text>
@@ -110,7 +117,7 @@ const EditProfileScreen: React.FC<Props> = ({navigation}) => {
           activeOpacity={0.7}>
           <TextInput
             style={[styles.dateInput, {color: theme.colors.textColor}]}
-            value={date.toLocaleDateString('en-GB')}
+            value={date ? date.toDateString() : 'Select Date'}
             editable={false}
             pointerEvents="none"
           />
@@ -120,15 +127,18 @@ const EditProfileScreen: React.FC<Props> = ({navigation}) => {
           />
         </TouchableOpacity>
 
-        <DatePickerModal
-          locale="en"
-          mode="single"
-          visible={showPicker}
-          date={date}
-          onConfirm={onConfirm}
-          onDismiss={() => setShowPicker(false)}
-        />
+        {/* Date Picker Modal */}
+        {showPicker && (
+          <DateTimePicker
+            value={date || new Date()}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'inline' : 'calendar'}
+            onChange={handleDateChange}
+          />
+        )}
       </View>
+
+      {/* Save Button */}
       <TouchableOpacity
         style={[styles.saveButton, {backgroundColor: theme.colors.primary}]}>
         <Text style={[styles.saveButtonText, {color: theme.colors.onPrimary}]}>

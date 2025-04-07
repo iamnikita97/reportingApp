@@ -57,13 +57,25 @@ const MenuPage: React.FC = () => {
       screen: 'UserProfile',
     },
     {
-      id: '3',
+      id: '4',
+      label: 'Product',
+      icon: 'productIcon',
+      screen: 'Products',
+    },
+    {
+      id: '5',
+      label: 'Report',
+      icon: 'reportIcon',
+      screen: 'Reports',
+    },
+    {
+      id: '6',
       label: 'Notifications',
       icon: 'notificationIcon',
       screen: 'Notifications',
     },
-    {id: '4', label: 'Customers', icon: 'customerIcon', screen: 'Customers'},
-    {id: '5', label: 'Settings', icon: 'settingIcon', screen: 'Setting'},
+    {id: '7', label: 'Customers', icon: 'customerIcon', screen: 'Customers'},
+    {id: '8', label: 'Settings', icon: 'settingIcon', screen: 'Setting'},
   ];
 
   return (

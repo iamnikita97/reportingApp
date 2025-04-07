@@ -43,6 +43,7 @@ const images: Record<string, any> = {
   CloseIcon: require('../assets/CloseIcon.png'),
   EditIcon: require('../assets/EditIcon.png'),
   ViewIcon: require('../assets/ViewIcon.png'),
+  productIcon: require('../assets/productIcon.png'),
 };
 
 interface ImageComponentProps {
@@ -58,7 +59,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({name, style}) => {
     return null;
   }
 
-  console.log(`✅ Rendering ImageComponent with: ${name}`);
+  console.log(` Rendering ImageComponent with: ${name}`);
 
   return <Image source={source} style={style} />;
 };

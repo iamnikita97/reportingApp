@@ -10,10 +10,12 @@ interface SearchBarProps {
   onChangeText: (text: string) => void;
   onFilterPress: () => void;
   onCreatePress: () => void;
+  title: string;
 }
 
 const CommonSearchBar: React.FC<SearchBarProps> = ({
   value,
+  title,
   onChangeText,
   onFilterPress,
   onCreatePress,
@@ -69,7 +71,7 @@ const CommonSearchBar: React.FC<SearchBarProps> = ({
       </TouchableOpacity>
 
       <CommonButton
-        title="Create"
+        title={title}
         onPress={onCreatePress}
         icon="createIcon"
         style={styles.createButton}
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   createButton: {
-    width: 100,
+    width: 150,
     marginLeft: 10,
   },
   searchIcon: {

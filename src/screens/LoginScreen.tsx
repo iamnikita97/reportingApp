@@ -61,7 +61,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
         label="Email"
         value={email}
         onChangeText={setEmail}
-        icon="emailIcon" // Ensure this matches the key in ImageComponent
+        icon="emailIcon"
       />
 
       {emailError ? (

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import Header from '../components/Header';
+import {useTheme} from 'react-native-paper';
 import {RouteProp} from '@react-navigation/native';
 import CommonTextInput from '../components/CommonTextInput';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {useTheme} from 'react-native-paper';
 
 interface ChangePasswordScreenProps {
   navigation: StackNavigationProp<any>;

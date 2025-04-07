@@ -1,14 +1,18 @@
 // AppNavigator.tsx
 import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MenuPage from '../Pages/MenuPage';
 import HomeScreen from '../screens/HomeScreen';
 import UsersScreen from '../screens/UsersScreen';
 import LoginScreen from '../screens/LoginScreen';
+import ReportScreen from '../screens/ReportScreen';
 import SignupScreen from '../screens/SignupScreen';
 import SettingScreen from '../screens/SettingScreen';
+import ProductScreen from '../screens/ProductScreen';
 import CustomerScreen from '../screens/CustomerScreen';
+import AddProductScreen from '../screens/AddProductScreen';
 import HelpSupportScreen from '../screens/HelpSupportScreen';
-import {NavigationContainer} from '@react-navigation/native';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import VerificationScreen from '../screens/VerificationScreen';
 import NotificationScreen from '../screens/NotificationScreen';
@@ -17,7 +21,6 @@ import CreatePasswordScreen from '../screens/CreatePasswordScreen';
 import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import TermsAndPoliciesScreen from '../screens/TermsAndPoliciesScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -35,6 +38,9 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   HelpSupport: undefined;
   TermsAndPolicies: undefined;
+  Products: undefined;
+  Reports: undefined;
+  AddProduct: undefined;
   MenuPage: undefined;
 };
 
@@ -42,7 +48,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -81,6 +87,21 @@ const AppNavigator = () => (
       <Stack.Screen
         name="UserProfile"
         component={UsersScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Products"
+        component={ProductScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AddProduct"
+        component={AddProductScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Reports"
+        component={ReportScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
