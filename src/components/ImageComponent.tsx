@@ -44,6 +44,8 @@ const images: Record<string, any> = {
   EditIcon: require('../assets/EditIcon.png'),
   ViewIcon: require('../assets/ViewIcon.png'),
   productIcon: require('../assets/productIcon.png'),
+  stateIcon: require('../assets/stateIcon.png'),
+  cityIcon: require('../assets/cityIcon.png'),
 };
 
 interface ImageComponentProps {

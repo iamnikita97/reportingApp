@@ -6,12 +6,10 @@ import MenuPage from '../Pages/MenuPage';
 import HomeScreen from '../screens/HomeScreen';
 import UsersScreen from '../screens/UsersScreen';
 import LoginScreen from '../screens/LoginScreen';
-import ReportScreen from '../screens/ReportScreen';
+import StateScreen from '../screens/StateScreen';
 import SignupScreen from '../screens/SignupScreen';
 import SettingScreen from '../screens/SettingScreen';
-import ProductScreen from '../screens/ProductScreen';
 import CustomerScreen from '../screens/CustomerScreen';
-import AddProductScreen from '../screens/AddProductScreen';
 import HelpSupportScreen from '../screens/HelpSupportScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import VerificationScreen from '../screens/VerificationScreen';
@@ -38,9 +36,7 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   HelpSupport: undefined;
   TermsAndPolicies: undefined;
-  Products: undefined;
-  Reports: undefined;
-  AddProduct: undefined;
+  State: undefined;
   MenuPage: undefined;
 };
 
@@ -90,18 +86,8 @@ const AppNavigator = () => (
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="Products"
-        component={ProductScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="AddProduct"
-        component={AddProductScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Reports"
-        component={ReportScreen}
+        name="State"
+        component={StateScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
