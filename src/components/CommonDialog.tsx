@@ -1,5 +1,5 @@
 import React, {FC, ReactNode} from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import {Dialog, Portal, useTheme} from 'react-native-paper';
 import ImageComponent from './ImageComponent';
 import {CustomThemeType} from '../theme/theme';
@@ -23,18 +23,31 @@ const CommonDialog: FC<CommonDialogProps> = ({
 
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss} style={styles.dialog}>
-        <View style={styles.header}>
-          <Dialog.Title style={[styles.title, {color: theme.colors.primary}]}>
+      <Dialog
+        visible={visible}
+        onDismiss={onDismiss}
+        style={[
+          styles.dialog,
+          {
+            backgroundColor: theme.colors.background,
+          },
+        ]}>
+        <View
+          style={[
+            styles.customHeader,
+            {borderBottomColor: theme.colors.iconColor},
+          ]}>
+          <Text style={[styles.title, {color: theme.colors.primary}]}>
             {title}
-          </Dialog.Title>
+          </Text>
           <TouchableOpacity onPress={onDismiss} style={styles.closeButton}>
-            <ImageComponent name="CloseIcon" style={styles.closeIcon} />
+            <ImageComponent
+              name="CloseIcon"
+              style={[styles.closeIcon, {tintColor: theme.colors.subTitle}]}
+            />
           </TouchableOpacity>
         </View>
-        {content && (
-          <Dialog.Content style={styles.content}>{content}</Dialog.Content>
-        )}
+        {content && <View style={styles.contentWrapper}>{content}</View>}
       </Dialog>
     </Portal>
   );
@@ -42,30 +55,36 @@ const CommonDialog: FC<CommonDialogProps> = ({
 
 const styles = StyleSheet.create({
   dialog: {
-    borderRadius: 12,
-    paddingBottom: 10,
+    borderRadius: 16,
+    marginHorizontal: 20,
+    overflow: 'hidden',
   },
-  header: {
+  customHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    marginBottom: 10,
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
   },
   title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    flexShrink: 1,
+    fontSize: 20,
+    fontWeight: '600',
+    flex: 1,
+    paddingRight: 10,
   },
   closeButton: {
     padding: 5,
+    marginLeft: 8,
   },
   closeIcon: {
-    width: 20,
-    height: 20,
+    width: 22,
+    height: 22,
   },
-  content: {
-    paddingHorizontal: 16,
+  contentWrapper: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
   },
 });
 

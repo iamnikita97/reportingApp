@@ -4,12 +4,14 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MenuPage from '../Pages/MenuPage';
 import HomeScreen from '../screens/HomeScreen';
+import CityScreen from '../screens/CityScreen';
 import UsersScreen from '../screens/UsersScreen';
 import LoginScreen from '../screens/LoginScreen';
 import StateScreen from '../screens/StateScreen';
 import SignupScreen from '../screens/SignupScreen';
 import SettingScreen from '../screens/SettingScreen';
 import CustomerScreen from '../screens/CustomerScreen';
+import StockListScreen from '../screens/StockListScreen';
 import HelpSupportScreen from '../screens/HelpSupportScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import VerificationScreen from '../screens/VerificationScreen';
@@ -37,6 +39,8 @@ export type RootStackParamList = {
   HelpSupport: undefined;
   TermsAndPolicies: undefined;
   State: undefined;
+  City: undefined;
+  StockList: undefined;
   MenuPage: undefined;
 };
 
@@ -91,8 +95,18 @@ const AppNavigator = () => (
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="City"
+        component={CityScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="Customers"
         component={CustomerScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="StockList"
+        component={StockListScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

@@ -23,6 +23,7 @@ const MenuPage: React.FC = () => {
   const translateX = useRef(new Animated.Value(-width * 0.7)).current;
   const [isClosing, setIsClosing] = useState(false);
   const [selected, setSelected] = useState('Dashboard');
+  const [showMasterSubmenu, setShowMasterSubmenu] = useState(false);
 
   useEffect(() => {
     Animated.timing(translateX, {
@@ -48,39 +49,120 @@ const MenuPage: React.FC = () => {
     });
   };
 
+  const navigateTo = (screen: keyof RootStackParamList, label: string) => {
+    setSelected(label);
+    closeMenu();
+    setTimeout(() => {
+      navigation.navigate(screen);
+    }, 300);
+  };
+
   const menuOptions = [
     {id: '1', label: 'Home', icon: 'homeIcon', screen: 'Home'},
+    {id: '2', label: 'Users', icon: 'userProfileIcon', screen: 'UserProfile'},
+    {id: '3', label: 'Customers', icon: 'customerIcon', screen: 'Customers'},
     {
-      id: '2',
-      label: 'Users',
-      icon: 'userProfileIcon',
-      screen: 'UserProfile',
+      id: '4',
+      label: 'Master',
+      icon: 'masterIcon',
+      isExpandable: true,
+      subMenu: [
+        {id: '4-1', label: 'Country', icon: 'countryIcon', screen: 'Country'},
+        {id: '4-2', label: 'State', icon: 'stateIcon', screen: 'State'},
+        {id: '4-3', label: 'City', icon: 'cityIcon', screen: 'City'},
+      ],
     },
-    {
-      id: '7',
-      label: 'Customers',
-      icon: 'customerIcon',
-      screen: 'Customers',
-    },
-    {
-      id: '9',
-      label: 'State',
-      icon: 'stateIcon',
-      screen: 'State',
-    },
-    {
-      id: '10',
-      label: 'City',
-      icon: 'cityIcon',
-      screen: 'CityScreen',
-    },
-    {
-      id: '8',
-      label: 'Settings',
-      icon: 'settingIcon',
-      screen: 'Setting',
-    },
+    {id: '5', label: 'Settings', icon: 'settingIcon', screen: 'Setting'},
   ];
+
+  const renderMenuItem = (item: any) => {
+    const isSelected = selected === item.label;
+
+    return (
+      <>
+        <TouchableOpacity
+          style={[
+            styles.menuItem,
+            isSelected &&
+              !item.isExpandable && {
+                backgroundColor: theme.colors.lightColor,
+              },
+          ]}
+          onPress={() => {
+            if (item.isExpandable) {
+              setShowMasterSubmenu(!showMasterSubmenu);
+            } else {
+              navigateTo(item.screen, item.label);
+            }
+          }}>
+          <ImageComponent
+            name={item.icon}
+            style={[
+              styles.menuIcon,
+              {tintColor: theme.colors.lightColor},
+              isSelected &&
+                !item.isExpandable && {
+                  tintColor: theme.colors.lightBlue,
+                },
+            ]}
+          />
+          <Text
+            style={[
+              styles.menuText,
+              isSelected &&
+                !item.isExpandable && {
+                  color: theme.colors.lightBlue,
+                },
+              isSelected && !item.isExpandable && styles.menuTextSelected,
+            ]}>
+            {item.label}
+          </Text>
+
+          {item.isExpandable && (
+            <ImageComponent
+              name={showMasterSubmenu ? 'chevronUpIcon' : 'chevronDownIcon'}
+              style={[styles.chevronIcon, {tintColor: theme.colors.lightColor}]}
+            />
+          )}
+        </TouchableOpacity>
+
+        {item.isExpandable && showMasterSubmenu && (
+          <View style={styles.subMenuContainer}>
+            {item.subMenu.map((sub: any) => {
+              const isSubSelected = selected === sub.label;
+              return (
+                <TouchableOpacity
+                  key={sub.id}
+                  style={[
+                    styles.subMenuItem,
+                    isSubSelected && {
+                      backgroundColor: theme.colors.lightColor,
+                    },
+                  ]}
+                  onPress={() => navigateTo(sub.screen, sub.label)}>
+                  <ImageComponent
+                    name={sub.icon}
+                    style={[
+                      styles.menuIcon,
+                      {tintColor: theme.colors.lightColor},
+                      isSubSelected && {tintColor: theme.colors.lightBlue},
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.subMenuText,
+                      isSubSelected && {color: theme.colors.lightBlue},
+                    ]}>
+                    {sub.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+      </>
+    );
+  };
 
   return (
     <View
@@ -122,52 +204,14 @@ const MenuPage: React.FC = () => {
               </Text>
             </View>
           </TouchableOpacity>
+
           <FlatList
             data={menuOptions}
             keyExtractor={item => item.id}
-            extraData={selected}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={[
-                  styles.menuItem,
-                  selected === item.label && {
-                    backgroundColor: theme.colors.lightColor,
-                  },
-                ]}
-                onPress={() => {
-                  setSelected(item.label);
-                  closeMenu();
-
-                  setTimeout(() => {
-                    if (item.screen) {
-                      navigation.navigate(item.screen as never);
-                    }
-                  }, 300);
-                }}>
-                <ImageComponent
-                  name={item.icon}
-                  style={[
-                    styles.menuIcon,
-                    {tintColor: theme.colors.lightColor},
-                    selected === item.label && {
-                      tintColor: theme.colors.lightBlue,
-                    },
-                  ]}
-                />
-
-                <Text
-                  style={[
-                    styles.menuText,
-                    selected === item.label && {
-                      color: theme.colors.lightBlue,
-                    },
-                    selected === item.label && styles.menuTextSelected,
-                  ]}>
-                  {item.label}
-                </Text>
-              </TouchableOpacity>
-            )}
+            extraData={[selected, showMasterSubmenu]}
+            renderItem={({item}) => renderMenuItem(item)}
           />
+
           <TouchableOpacity
             style={[
               styles.logoutButton,
@@ -175,7 +219,6 @@ const MenuPage: React.FC = () => {
             ]}
             onPress={() => {
               closeMenu();
-
               setTimeout(() => {
                 navigation.reset({
                   index: 0,
@@ -261,6 +304,26 @@ const styles = StyleSheet.create({
   menuIcon: {
     width: 24,
     height: 24,
+  },
+  chevronIcon: {
+    width: 18,
+    height: 18,
+    marginLeft: 'auto',
+  },
+  subMenuContainer: {
+    paddingLeft: 30,
+    marginBottom: 10,
+  },
+  subMenuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 8,
+  },
+  subMenuText: {
+    fontSize: 15,
+    marginLeft: 15,
   },
   logoutButton: {
     flexDirection: 'row',

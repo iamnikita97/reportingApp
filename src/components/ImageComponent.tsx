@@ -1,7 +1,6 @@
 import React from 'react';
 import {Image, ImageStyle, StyleProp} from 'react-native';
 
-// ✅ Define all images in a dictionary
 const images: Record<string, any> = {
   emailIcon: require('../assets/emailIcon.png'),
   lockIcon: require('../assets/lockIcon.png'),
@@ -46,6 +45,9 @@ const images: Record<string, any> = {
   productIcon: require('../assets/productIcon.png'),
   stateIcon: require('../assets/stateIcon.png'),
   cityIcon: require('../assets/cityIcon.png'),
+  masterIcon: require('../assets/masterIcon.png'),
+  countryIcon: require('../assets/countryIcon.png'),
+  PlusIcon: require('../assets/PlusIcon.png'),
 };
 
 interface ImageComponentProps {

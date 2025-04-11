@@ -1,14 +1,21 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import Header from '../components/Header';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import {CustomThemeType} from '../theme/theme';
+import {useNavigation} from '@react-navigation/native';
+import Header from '../components/Header';
 import CommonCard from '../components/CommonCard';
 import CommonForm from '../components/CommonForm';
 import CommonDialog from '../components/CommonDialog';
-import {useNavigation} from '@react-navigation/native';
 import CommonSearchBar from '../components/CommonSearchBar';
-import {View, FlatList, StyleSheet, Text} from 'react-native';
 import CommonFilterModal from '../components/CommonFilterModal';
+import {CustomThemeType} from '../theme/theme';
 
 const USERS = [
   {
@@ -49,6 +56,7 @@ type User = {
 const UsersScreen: React.FC = () => {
   const navigation = useNavigation();
   const theme = useTheme() as CustomThemeType;
+
   const [searchText, setSearchText] = useState('');
   const [selectedRole, setSelectedRole] = useState('All');
   const [isFilterVisible, setFilterVisible] = useState(false);
@@ -96,91 +104,98 @@ const UsersScreen: React.FC = () => {
   };
 
   return (
-    <View
-      style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
-      <Header title="Users" onBackPress={() => navigation.goBack()} />
-      <View style={styles.mainContainer}>
-        <CommonSearchBar
-          title="Add User"
-          value={searchText}
-          onChangeText={setSearchText}
-          onFilterPress={() => setFilterVisible(true)}
-          onCreatePress={() => {
-            setSelectedUser(null);
-            setIsReadOnly(false);
-            setDialogVisible(true);
-          }}
-        />
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View
+        style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
+        <Header title="Users" onBackPress={() => navigation.goBack()} />
 
-      <FlatList
-        data={filteredUsers}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => (
-          <CommonCard
-            title={item.name}
-            email={item.email}
-            phone={item.phone}
-            extraContent={
-              <View>
-                <Text>{`Role: ${item.role}`}</Text>
-                <Text>{`Gender: ${item.gender}`}</Text>
-              </View>
-            }
-            onView={() => {
-              setSelectedUser(item);
-              setIsReadOnly(true);
-              setDialogVisible(true);
-            }}
-            onEdit={() => {
-              setSelectedUser(item);
+        <View style={styles.mainContainer}>
+          <CommonSearchBar
+            title="Add User"
+            value={searchText}
+            onChangeText={setSearchText}
+            onFilterPress={() => setFilterVisible(true)}
+            onCreatePress={() => {
+              setSelectedUser(null);
               setIsReadOnly(false);
               setDialogVisible(true);
             }}
           />
-        )}
-      />
+        </View>
 
-      <CommonFilterModal
-        visible={isFilterVisible}
-        title="Filter Users"
-        options={[
-          {
-            label: 'Role',
-            values: [
-              {label: 'All', value: 'All'},
-              {label: 'Pharmacist', value: 'Pharmacist'},
-              {label: 'Manager', value: 'Manager'},
-              {label: 'Assistant', value: 'Assistant'},
-            ],
-            selectedValue: selectedRole,
-            onSelect: value => setSelectedRole(value),
-          },
-        ]}
-        onClose={() => setFilterVisible(false)}
-      />
+        <FlatList
+          data={filteredUsers}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => (
+            <CommonCard
+              title={item.name}
+              email={item.email}
+              phone={item.phone}
+              extraContent={
+                <View>
+                  <Text>{`Role: ${item.role}`}</Text>
+                  <Text>{`Gender: ${item.gender}`}</Text>
+                </View>
+              }
+              onView={() => {
+                setSelectedUser(item);
+                setIsReadOnly(true);
+                setDialogVisible(true);
+              }}
+              onEdit={() => {
+                setSelectedUser(item);
+                setIsReadOnly(false);
+                setDialogVisible(true);
+              }}
+            />
+          )}
+        />
 
-      <CommonDialog
-        visible={dialogVisible}
-        title={
-          isReadOnly ? 'View User' : selectedUser ? 'Edit User' : 'Add New User'
-        }
-        content={
-          <CommonForm
-            fields={fields}
-            initialValues={selectedUser || {}}
-            readOnly={isReadOnly}
-            onSubmit={handleSubmit}
-            onCancel={() => setDialogVisible(false)}
-          />
-        }
-        onDismiss={() => {
-          setDialogVisible(false);
-          setSelectedUser(null);
-        }}
-        onSubmit={() => console.log('Submit button clicked')}
-      />
-    </View>
+        <CommonFilterModal
+          visible={isFilterVisible}
+          title="Filter Users"
+          options={[
+            {
+              label: 'Role',
+              values: [
+                {label: 'All', value: 'All'},
+                {label: 'Pharmacist', value: 'Pharmacist'},
+                {label: 'Manager', value: 'Manager'},
+                {label: 'Assistant', value: 'Assistant'},
+              ],
+              selectedValue: selectedRole,
+              onSelect: value => setSelectedRole(value),
+            },
+          ]}
+          onClose={() => setFilterVisible(false)}
+        />
+
+        <CommonDialog
+          visible={dialogVisible}
+          title={
+            isReadOnly
+              ? 'View User'
+              : selectedUser
+                ? 'Edit User'
+                : 'Add New User'
+          }
+          content={
+            <CommonForm
+              fields={fields}
+              initialValues={selectedUser || {}}
+              readOnly={isReadOnly}
+              onSubmit={handleSubmit}
+              onCancel={() => setDialogVisible(false)}
+            />
+          }
+          onDismiss={() => {
+            setDialogVisible(false);
+            setSelectedUser(null);
+          }}
+          onSubmit={() => console.log('Submit button clicked')}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

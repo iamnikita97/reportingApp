@@ -51,10 +51,7 @@ const StateScreen: React.FC<StateScreenProps> = ({navigation}) => {
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
-      {/* Updated Header */}
       <Header title="State" onBackPress={() => navigation.goBack()} />
-
-      {/* Country Selector */}
       <View style={styles.dropdownContainer}>
         <Text style={[styles.label, {color: theme.colors.textColor}]}>
           Select Country
@@ -73,8 +70,6 @@ const StateScreen: React.FC<StateScreenProps> = ({navigation}) => {
           </Text>
         </TouchableOpacity>
       </View>
-
-      {/* Country List Modal */}
       <Modal
         transparent
         animationType="fade"
