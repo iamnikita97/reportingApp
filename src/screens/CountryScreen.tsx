@@ -1,4 +1,8 @@
-const countries = ['India', 'USA', 'Canada'];
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
+import {useTheme} from 'react-native-paper';
+import Header from '../components/Header';
+import {CustomThemeType} from '../theme/theme';
 
 const CountryScreen = () => {
   const theme = useTheme() as CustomThemeType;
@@ -6,27 +10,15 @@ const CountryScreen = () => {
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
-      <Text style={[styles.title, {color: theme.colors.textColor}]}>
-        Countries
-      </Text>
-
-      <FlatList
-        data={countries}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => (
-          <View
-            style={[styles.item, {backgroundColor: theme.colors.inputText}]}>
-            <Text style={{color: theme.colors.textColor}}>{item}</Text>
-          </View>
-        )}
-      />
-
-      <TouchableOpacity
-        style={[styles.addButton, {backgroundColor: theme.colors.primary}]}>
-        <Text style={{color: theme.colors.inputText}}>Add Country</Text>
-      </TouchableOpacity>
+      <Header title="Country" />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default CountryScreen;

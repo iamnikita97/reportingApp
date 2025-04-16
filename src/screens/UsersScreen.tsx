@@ -1,21 +1,21 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {
+  Text,
   View,
+  Keyboard,
   FlatList,
   StyleSheet,
-  Text,
-  Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {useTheme} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
 import Header from '../components/Header';
+import {useTheme} from 'react-native-paper';
+import {CustomThemeType} from '../theme/theme';
 import CommonCard from '../components/CommonCard';
 import CommonForm from '../components/CommonForm';
 import CommonDialog from '../components/CommonDialog';
+import {useNavigation} from '@react-navigation/native';
 import CommonSearchBar from '../components/CommonSearchBar';
 import CommonFilterModal from '../components/CommonFilterModal';
-import {CustomThemeType} from '../theme/theme';
 
 const USERS = [
   {
@@ -56,7 +56,6 @@ type User = {
 const UsersScreen: React.FC = () => {
   const navigation = useNavigation();
   const theme = useTheme() as CustomThemeType;
-
   const [searchText, setSearchText] = useState('');
   const [selectedRole, setSelectedRole] = useState('All');
   const [isFilterVisible, setFilterVisible] = useState(false);
@@ -192,7 +191,7 @@ const UsersScreen: React.FC = () => {
             setDialogVisible(false);
             setSelectedUser(null);
           }}
-          onSubmit={() => console.log('Submit button clicked')}
+          // onSubmit={() => console.log('Submit button clicked')}
         />
       </View>
     </TouchableWithoutFeedback>

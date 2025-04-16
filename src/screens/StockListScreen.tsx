@@ -1,22 +1,11 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-} from 'react-native';
+import React, {useState, useMemo} from 'react';
+import Header from '../components/Header';
 import {useTheme} from 'react-native-paper';
 import {CustomThemeType} from '../theme/theme';
+import StockListItem from '../components/StockListItem';
+import StockFormModal from '../components/StockFormModal';
 import {StackNavigationProp} from '@react-navigation/stack';
-import Header from '../components/Header';
-import ImageComponent from '../components/ImageComponent'; // Make sure this path is correct
-
-type StockListScreenProps = {
-  navigation: StackNavigationProp<any>;
-};
+import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 
 type StockItem = {
   id: string;
@@ -34,6 +23,14 @@ const initialData: StockItem[] = [
   {id: '6', name: 'Estrogen Cream', quantity: 15, unit: 'tubes'},
 ];
 
+type StockListScreenProps = {
+  navigation: StackNavigationProp<any>;
+};
+
+const ItemSeparator: React.FC<{color: string}> = ({color}) => (
+  <View style={[styles.separator, {backgroundColor: color}]} />
+);
+
 const StockListScreen: React.FC<StockListScreenProps> = ({navigation}) => {
   const theme = useTheme() as CustomThemeType;
   const [stockList, setStockList] = useState<StockItem[]>(initialData);
@@ -45,12 +42,12 @@ const StockListScreen: React.FC<StockListScreenProps> = ({navigation}) => {
     unit: '',
   });
 
+  const separator = useMemo(() => {
+    return () => <ItemSeparator color={theme.colors.whiteSmoke} />;
+  }, [theme.colors.whiteSmoke]);
+
   const openForm = (item?: StockItem) => {
-    if (item) {
-      setFormData(item);
-    } else {
-      setFormData({id: '', name: '', quantity: 0, unit: ''});
-    }
+    setFormData(item ?? {id: '', name: '', quantity: 0, unit: ''});
     setModalVisible(true);
   };
 
@@ -72,39 +69,6 @@ const StockListScreen: React.FC<StockListScreenProps> = ({navigation}) => {
     setStockList(prev => prev.filter(item => item.id !== id));
   };
 
-  const renderItem = ({item}: {item: StockItem}) => (
-    <View
-      style={[
-        styles.card,
-        {
-          backgroundColor: theme.colors.inputText,
-          shadowColor: theme.colors.textColor,
-        },
-      ]}>
-      <View style={styles.cardLeft}>
-        <Text style={[styles.productName, {color: theme.colors.textColor}]}>
-          {item.name}
-        </Text>
-        <Text style={{color: theme.colors.textColor}}>
-          {item.quantity} {item.unit}
-        </Text>
-      </View>
-      <View style={styles.cardRight}>
-        <TouchableOpacity onPress={() => openForm(item)} style={styles.iconBtn}>
-          <ImageComponent
-            name="EditIcon"
-            style={[styles.icon, {tintColor: theme.colors.secondary}]}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleDelete(item.id)}
-          style={styles.iconBtn}>
-          <ImageComponent name="deleteIcon" style={[styles.icon]} />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.whiteSmoke}]}>
@@ -114,70 +78,31 @@ const StockListScreen: React.FC<StockListScreenProps> = ({navigation}) => {
         contentContainerStyle={styles.listContainer}
         data={stockList}
         keyExtractor={item => item.id}
-        renderItem={renderItem}
-        ItemSeparatorComponent={() => (
-          <View
-            style={[
-              styles.separator,
-              {backgroundColor: theme.colors.whiteSmoke},
-            ]}
+        renderItem={({item}) => (
+          <StockListItem
+            item={item}
+            theme={theme}
+            onEdit={openForm}
+            onDelete={handleDelete}
           />
         )}
+        ItemSeparatorComponent={separator}
       />
 
       <TouchableOpacity
         style={[styles.fab, {backgroundColor: theme.colors.secondary}]}
         onPress={() => openForm()}>
-        <Text style={{color: theme.colors.inputText, fontSize: 20}}>＋</Text>
+        <Text style={[styles.fabIcon, {color: theme.colors.inputText}]}>
+          ＋
+        </Text>
       </TouchableOpacity>
-
-      <Modal visible={modalVisible} transparent animationType="slide">
-        <View style={styles.modalContainer}>
-          <View
-            style={[
-              styles.modalContent,
-              {backgroundColor: theme.colors.inputText},
-            ]}>
-            <Text style={[styles.modalTitle, {color: theme.colors.textColor}]}>
-              {formData.id ? 'Edit' : 'Add'} Stock
-            </Text>
-            <TextInput
-              placeholder="Medicine Name"
-              value={formData.name}
-              onChangeText={text => setFormData({...formData, name: text})}
-              style={[styles.input, {color: theme.colors.textColor}]}
-              placeholderTextColor={theme.colors.disabledColor}
-            />
-            <TextInput
-              placeholder="Quantity"
-              keyboardType="numeric"
-              value={formData.quantity.toString()}
-              onChangeText={text =>
-                setFormData({...formData, quantity: Number(text)})
-              }
-              style={[styles.input, {color: theme.colors.textColor}]}
-              placeholderTextColor={theme.colors.disabledColor}
-            />
-            <TextInput
-              placeholder="Unit (e.g. tablets)"
-              value={formData.unit}
-              onChangeText={text => setFormData({...formData, unit: text})}
-              style={[styles.input, {color: theme.colors.textColor}]}
-              placeholderTextColor={theme.colors.disabledColor}
-            />
-            <View style={styles.modalButtons}>
-              <TouchableOpacity onPress={handleSave} style={styles.modalBtn}>
-                <Text style={{color: theme.colors.secondary}}>Save</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={styles.modalBtn}>
-                <Text style={{color: 'red'}}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <StockFormModal
+        visible={modalVisible}
+        formData={formData}
+        setFormData={setFormData}
+        onClose={() => setModalVisible(false)}
+        onSave={handleSave}
+      />
     </View>
   );
 };
@@ -185,29 +110,6 @@ const StockListScreen: React.FC<StockListScreenProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {flex: 1},
   listContainer: {padding: 16},
-  card: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 12,
-    elevation: 3,
-  },
-  cardLeft: {flex: 1},
-  productName: {fontSize: 18, fontWeight: '600'},
-  cardRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  iconBtn: {
-    padding: 4,
-  },
-  icon: {
-    width: 20,
-    height: 20,
-    resizeMode: 'contain',
-  },
   separator: {height: 12},
   fab: {
     position: 'absolute',
@@ -220,34 +122,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 4,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 24,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-  },
-  modalContent: {
-    padding: 20,
-    borderRadius: 10,
-  },
-  modalTitle: {
+  fabIcon: {
     fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  input: {
-    borderBottomWidth: 1,
-    marginBottom: 12,
-    fontSize: 16,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 16,
-  },
-  modalBtn: {
-    padding: 10,
   },
 });
 

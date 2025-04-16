@@ -9,6 +9,7 @@ import UsersScreen from '../screens/UsersScreen';
 import LoginScreen from '../screens/LoginScreen';
 import StateScreen from '../screens/StateScreen';
 import SignupScreen from '../screens/SignupScreen';
+import CountryScreen from '../screens/CountryScreen';
 import SettingScreen from '../screens/SettingScreen';
 import CustomerScreen from '../screens/CustomerScreen';
 import StockListScreen from '../screens/StockListScreen';
@@ -41,6 +42,7 @@ export type RootStackParamList = {
   State: undefined;
   City: undefined;
   StockList: undefined;
+  Country: undefined;
   MenuPage: undefined;
 };
 
@@ -97,6 +99,11 @@ const AppNavigator = () => (
       <Stack.Screen
         name="City"
         component={CityScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Country"
+        component={CountryScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

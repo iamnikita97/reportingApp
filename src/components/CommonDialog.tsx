@@ -1,16 +1,14 @@
 import React, {FC, ReactNode} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
-import {Dialog, Portal, useTheme} from 'react-native-paper';
 import ImageComponent from './ImageComponent';
 import {CustomThemeType} from '../theme/theme';
+import {Portal, useTheme} from 'react-native-paper';
+import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 
 interface CommonDialogProps {
   visible: boolean;
   title: string;
   content?: ReactNode;
-  loading?: boolean;
   onDismiss: () => void;
-  onSubmit?: () => void;
 }
 
 const CommonDialog: FC<CommonDialogProps> = ({
@@ -21,42 +19,51 @@ const CommonDialog: FC<CommonDialogProps> = ({
 }) => {
   const theme = useTheme() as CustomThemeType;
 
+  if (!visible) return null;
+
   return (
     <Portal>
-      <Dialog
-        visible={visible}
-        onDismiss={onDismiss}
-        style={[
-          styles.dialog,
-          {
-            backgroundColor: theme.colors.background,
-          },
-        ]}>
+      <View style={[styles.overlay, {backgroundColor: theme.colors.backdrop}]}>
         <View
-          style={[
-            styles.customHeader,
-            {borderBottomColor: theme.colors.iconColor},
-          ]}>
-          <Text style={[styles.title, {color: theme.colors.primary}]}>
-            {title}
-          </Text>
-          <TouchableOpacity onPress={onDismiss} style={styles.closeButton}>
-            <ImageComponent
-              name="CloseIcon"
-              style={[styles.closeIcon, {tintColor: theme.colors.subTitle}]}
-            />
-          </TouchableOpacity>
+          style={[styles.dialog, {backgroundColor: theme.colors.background}]}>
+          {/* Custom Header */}
+          <View
+            style={[
+              styles.customHeader,
+              {borderBottomColor: theme.colors.iconColor},
+            ]}>
+            <Text style={[styles.title, {color: theme.colors.primary}]}>
+              {title}
+            </Text>
+            <TouchableOpacity onPress={onDismiss} style={styles.closeButton}>
+              <ImageComponent
+                name="CloseIcon"
+                style={[styles.closeIcon, {tintColor: theme.colors.subTitle}]}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* Content */}
+          {content && <View style={styles.contentWrapper}>{content}</View>}
         </View>
-        {content && <View style={styles.contentWrapper}>{content}</View>}
-      </Dialog>
+      </View>
     </Portal>
   );
 };
 
 const styles = StyleSheet.create({
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   dialog: {
+    width: '90%',
     borderRadius: 16,
-    marginHorizontal: 20,
     overflow: 'hidden',
   },
   customHeader: {
@@ -64,8 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingVertical: 16,
     borderBottomWidth: 1,
   },
   title: {

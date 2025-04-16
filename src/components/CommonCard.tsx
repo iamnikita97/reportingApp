@@ -1,8 +1,8 @@
 import React, {useState, ReactNode} from 'react';
 import {useTheme} from 'react-native-paper';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import ImageComponent from './ImageComponent';
 import {CustomThemeType} from '../theme/theme';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 interface CommonCardProps {
   title: string;
@@ -52,6 +52,7 @@ const CommonCard: React.FC<CommonCardProps> = ({
               </View>
             </View>
           </View>
+
           <View style={styles.iconColumn}>
             <TouchableOpacity
               onPress={() => setExpanded(!expanded)}
@@ -76,6 +77,7 @@ const CommonCard: React.FC<CommonCardProps> = ({
             )}
           </View>
         </View>
+
         {expanded && <View style={styles.details}>{extraContent}</View>}
       </View>
     </View>
@@ -85,7 +87,7 @@ const CommonCard: React.FC<CommonCardProps> = ({
 const styles = StyleSheet.create({
   cardWrapper: {
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   card: {
     padding: 15,
@@ -99,11 +101,11 @@ const styles = StyleSheet.create({
   leftContent: {
     flexDirection: 'row',
     flex: 1,
-    marginBottom: 35,
+    alignItems: 'center', // ✅ This centers the icon with user info
   },
   profileIcon: {
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
     borderRadius: 25,
     marginRight: 15,
   },
@@ -119,7 +121,8 @@ const styles = StyleSheet.create({
   detailRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 3,
+    marginBottom: 10,
+    marginTop: 10,
   },
   detailIcon: {
     width: 16,

@@ -22,8 +22,10 @@ const MenuPage: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const translateX = useRef(new Animated.Value(-width * 0.7)).current;
   const [isClosing, setIsClosing] = useState(false);
-  const [selected, setSelected] = useState('Dashboard');
-  const [showMasterSubmenu, setShowMasterSubmenu] = useState(false);
+  const [selected, setSelected] = useState('Home');
+  const [expandedMenus, setExpandedMenus] = useState<{[key: string]: boolean}>(
+    {},
+  );
 
   useEffect(() => {
     Animated.timing(translateX, {
@@ -36,7 +38,6 @@ const MenuPage: React.FC = () => {
   const closeMenu = () => {
     if (isClosing) return;
     setIsClosing(true);
-
     Animated.timing(translateX, {
       toValue: -width * 0.7,
       duration: 300,
@@ -49,8 +50,28 @@ const MenuPage: React.FC = () => {
     });
   };
 
-  const navigateTo = (screen: keyof RootStackParamList, label: string) => {
+  const navigateTo = (
+    screen: keyof RootStackParamList,
+    label: string,
+    fromSubMenu = false,
+    parentLabel?: string,
+  ) => {
     setSelected(label);
+
+    if (!fromSubMenu) {
+      const selectedMenu = menuOptions.find(item => item.label === label);
+      if (!selectedMenu?.isExpandable) {
+        setExpandedMenus({});
+      }
+    }
+
+    if (fromSubMenu && parentLabel) {
+      setExpandedMenus(prev => ({
+        ...prev,
+        [parentLabel]: false,
+      }));
+    }
+
     closeMenu();
     setTimeout(() => {
       navigation.navigate(screen);
@@ -72,25 +93,31 @@ const MenuPage: React.FC = () => {
         {id: '4-3', label: 'City', icon: 'cityIcon', screen: 'City'},
       ],
     },
-    {id: '5', label: 'Settings', icon: 'settingIcon', screen: 'Setting'},
+    {id: '5', label: 'Stock List', icon: 'productIcon', screen: 'StockList'},
+    {id: '6', label: 'Settings', icon: 'settingIcon', screen: 'Setting'},
   ];
 
   const renderMenuItem = (item: any) => {
-    const isSelected = selected === item.label;
+    const isSubmenuOpen = item.isExpandable && expandedMenus[item.label];
+    const isSelected =
+      selected === item.label ||
+      item.subMenu?.some((sub: any) => sub.label === selected);
 
     return (
       <>
         <TouchableOpacity
           style={[
             styles.menuItem,
-            isSelected &&
-              !item.isExpandable && {
-                backgroundColor: theme.colors.lightColor,
-              },
+            isSelected && {
+              backgroundColor: theme.colors.disabledColor,
+            },
           ]}
           onPress={() => {
             if (item.isExpandable) {
-              setShowMasterSubmenu(!showMasterSubmenu);
+              setExpandedMenus(prev => ({
+                ...prev,
+                [item.label]: !prev[item.label],
+              }));
             } else {
               navigateTo(item.screen, item.label);
             }
@@ -100,33 +127,25 @@ const MenuPage: React.FC = () => {
             style={[
               styles.menuIcon,
               {tintColor: theme.colors.lightColor},
-              isSelected &&
-                !item.isExpandable && {
-                  tintColor: theme.colors.lightBlue,
-                },
+              isSelected && {tintColor: theme.colors.textColor},
             ]}
           />
           <Text
             style={[
               styles.menuText,
-              isSelected &&
-                !item.isExpandable && {
-                  color: theme.colors.lightBlue,
-                },
-              isSelected && !item.isExpandable && styles.menuTextSelected,
+              isSelected && {color: theme.colors.textColor},
             ]}>
             {item.label}
           </Text>
-
           {item.isExpandable && (
             <ImageComponent
-              name={showMasterSubmenu ? 'chevronUpIcon' : 'chevronDownIcon'}
+              name={isSubmenuOpen ? 'chevronUpIcon' : 'chevronDownIcon'}
               style={[styles.chevronIcon, {tintColor: theme.colors.lightColor}]}
             />
           )}
         </TouchableOpacity>
 
-        {item.isExpandable && showMasterSubmenu && (
+        {item.isExpandable && isSubmenuOpen && (
           <View style={styles.subMenuContainer}>
             {item.subMenu.map((sub: any) => {
               const isSubSelected = selected === sub.label;
@@ -136,10 +155,12 @@ const MenuPage: React.FC = () => {
                   style={[
                     styles.subMenuItem,
                     isSubSelected && {
-                      backgroundColor: theme.colors.lightColor,
+                      backgroundColor: theme.colors.lightColor || '#f0f0f0',
                     },
                   ]}
-                  onPress={() => navigateTo(sub.screen, sub.label)}>
+                  onPress={() => {
+                    navigateTo(sub.screen, sub.label, true, item.label);
+                  }}>
                   <ImageComponent
                     name={sub.icon}
                     style={[
@@ -208,7 +229,7 @@ const MenuPage: React.FC = () => {
           <FlatList
             data={menuOptions}
             keyExtractor={item => item.id}
-            extraData={[selected, showMasterSubmenu]}
+            extraData={[selected, expandedMenus]}
             renderItem={({item}) => renderMenuItem(item)}
           />
 
@@ -222,7 +243,7 @@ const MenuPage: React.FC = () => {
               setTimeout(() => {
                 navigation.reset({
                   index: 0,
-                  routes: [{name: 'Login' as keyof RootStackParamList}],
+                  routes: [{name: 'Login'}],
                 });
               }, 300);
             }}>
@@ -297,9 +318,6 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 16,
     marginLeft: 15,
-  },
-  menuTextSelected: {
-    fontWeight: 'bold',
   },
   menuIcon: {
     width: 24,
