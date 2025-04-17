@@ -23,7 +23,6 @@ const HomeScreen: React.FC = () => {
 
   const counts: CountItem[] = [
     {title: 'Users', count: 120},
-    {title: 'Reports', count: 45},
     {title: 'Customers', count: 10},
   ];
 

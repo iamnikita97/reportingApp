@@ -48,6 +48,10 @@ const images: Record<string, any> = {
   masterIcon: require('../assets/masterIcon.png'),
   countryIcon: require('../assets/countryIcon.png'),
   PlusIcon: require('../assets/PlusIcon.png'),
+  stpIcon: require('../assets/stpIcon.png'),
+  warningIcon: require('../assets/warningIcon.png'),
+  calendarIcon: require('../assets/calendarIcon.png'),
+  roleIcon: require('../assets/roleIcon.png'),
 };
 
 interface ImageComponentProps {

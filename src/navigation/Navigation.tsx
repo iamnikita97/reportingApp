@@ -3,6 +3,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MenuPage from '../Pages/MenuPage';
+import STPScreen from '../screens/STPScreen';
 import HomeScreen from '../screens/HomeScreen';
 import CityScreen from '../screens/CityScreen';
 import UsersScreen from '../screens/UsersScreen';
@@ -43,6 +44,7 @@ export type RootStackParamList = {
   City: undefined;
   StockList: undefined;
   Country: undefined;
+  STP: undefined;
   MenuPage: undefined;
 };
 
@@ -114,6 +116,11 @@ const AppNavigator = () => (
       <Stack.Screen
         name="StockList"
         component={StockListScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="STP"
+        component={STPScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

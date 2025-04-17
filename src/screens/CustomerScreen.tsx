@@ -25,6 +25,8 @@ const USERS = [
     phone: '123-456-7890',
     role: 'Pharmacist',
     gender: 'Male',
+    address: 'Vadodara',
+    qualification: 'BCA',
   },
   {
     id: '2',
@@ -33,6 +35,8 @@ const USERS = [
     phone: '987-654-3210',
     role: 'Manager',
     gender: 'Female',
+    address: 'Vadodara',
+    qualification: 'BA',
   },
   {
     id: '3',
@@ -41,6 +45,8 @@ const USERS = [
     phone: '456-789-0123',
     role: 'Assistant',
     gender: 'Female',
+    address: 'Vadodara',
+    qualification: 'MA',
   },
 ];
 
@@ -51,6 +57,8 @@ type User = {
   phone: string;
   role: string;
   gender: string;
+  address: string;
+  qualification: string;
 };
 
 const CustomerScreen: React.FC = () => {
@@ -94,6 +102,12 @@ const CustomerScreen: React.FC = () => {
     },
     {name: 'role', label: 'Role', placeholder: 'Enter role'},
     {name: 'gender', label: 'Gender', placeholder: 'Enter gender'},
+    {name: 'address', label: 'Address', placeholder: 'Enter address'},
+    {
+      name: 'qualification',
+      label: 'Qualification',
+      placeholder: 'Enter qualification',
+    },
   ];
 
   const handleSubmit = (data: Record<string, string>) => {
@@ -134,6 +148,8 @@ const CustomerScreen: React.FC = () => {
                 <View>
                   <Text>{`Role: ${item.role}`}</Text>
                   <Text>{`Gender: ${item.gender}`}</Text>
+                  <Text>{`Address: ${item.address}`}</Text>
+                  <Text>{`Qualification: ${item.qualification}`}</Text>
                 </View>
               }
               onView={() => {

@@ -94,7 +94,8 @@ const MenuPage: React.FC = () => {
       ],
     },
     {id: '5', label: 'Stock List', icon: 'productIcon', screen: 'StockList'},
-    {id: '6', label: 'Settings', icon: 'settingIcon', screen: 'Setting'},
+    {id: '6', label: 'STP', icon: 'stpIcon', screen: 'STP'},
+    {id: '7', label: 'Settings', icon: 'settingIcon', screen: 'Setting'},
   ];
 
   const renderMenuItem = (item: any) => {
